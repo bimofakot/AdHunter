@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--
         QUERY_ALL_PACKAGES diperlukan karena AdHunter adalah auditor izin lokal:
@@ -9,6 +10,25 @@
     -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
+    <!--
+        Foreground service pemantau aplikasi di layar.
+        - FOREGROUND_SERVICE: dasar menjalankan service dengan notifikasi permanen.
+        - FOREGROUND_SERVICE_SPECIAL_USE: jenis specialUse untuk fitur pemantauan
+          lokal yang bukan media/lokasi/mikrofon; wajib di Android 14 ke atas.
+        - POST_NOTIFICATIONS: izin runtime Android 13+ agar notifikasi permanen terlihat.
+        - PACKAGE_USAGE_STATS: special app access (bukan runtime), dipakai
+          UsageStatsManager.queryEvents dan harus diaktifkan manual di Usage Access.
+        - REQUEST_IGNORE_BATTERY_OPTIMIZATIONS: agar pengguna bisa mengecualikan
+          AdHunter dari optimasi baterai supaya service tidak dihentikan sistem.
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +36,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AdHunter">
+
+        <service
+            android:name=".data.ForegroundMonitorService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Pemantauan lokal aplikasi yang tampil di layar untuk audit izin AdHunter" />
+        </service>
 
         <activity
             android:name=".MainActivity"

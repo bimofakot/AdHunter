@@ -9,6 +9,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.AppOpsManager
 import android.app.admin.DevicePolicyManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -40,6 +41,7 @@ class AppAuditScanner(context: Context) {
             val accessibilityPackages = enabledAccessibilityPackages()
             val adminPackages = activeDeviceAdminPackages()
             val listenerPackages = enabledNotificationListenerPackages()
+            val launcherPackages = launcherVisiblePackages()
             val applications = installedApplications()
             val entries = ArrayList<AppAuditEntry>(applications.size)
 
@@ -86,6 +88,7 @@ class AppAuditScanner(context: Context) {
                     firstInstallTime = firstInstallTime,
                     lastUpdateTime = lastUpdateTime,
                     isSystemApp = isSystemApp,
+                    hasLauncherIntent = application.packageName in launcherPackages,
                 )
             }
 
@@ -99,6 +102,15 @@ class AppAuditScanner(context: Context) {
     @Suppress("DEPRECATION")
     private fun installedApplications(): List<ApplicationInfo> =
         packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+
+    // Dipakai layar Pemantau: app tanpa launcher dan bukan app sistem dianggap mencurigakan.
+    @Suppress("DEPRECATION")
+    private fun launcherVisiblePackages(): Set<String> = runCatching {
+        val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+        packageManager.queryIntentActivities(intent, 0)
+            .mapNotNull { it.activityInfo?.packageName }
+            .toSet()
+    }.getOrDefault(emptySet())
 
     private fun loadAppName(application: ApplicationInfo): String {
         val label = runCatching { application.loadLabel(packageManager).toString() }

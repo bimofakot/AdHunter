@@ -29,6 +29,7 @@ data class AppAuditEntry(
     val firstInstallTime: Long,
     val lastUpdateTime: Long,
     val isSystemApp: Boolean,
+    val hasLauncherIntent: Boolean,
 ) {
     val riskScore: Int
         get() = riskyPermissions.size + if (installer == InstallerSource.SIDELOAD) 1 else 0
