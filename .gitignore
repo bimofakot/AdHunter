@@ -1,0 +1,38 @@
+# Gradle
+.gradle/
+build/
+.kotlin/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+local.properties
+
+# Output build Android
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Signing
+*.jks
+*.keystore
+keystore.properties
+
+# OS dan log
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# Catatan lokal dan konfigurasi agent
+catatan/
+.qoder/
+
+# Catatan: gradlew, gradlew.bat, dan gradle/wrapper/ sengaja TIDAK diabaikan

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AdHunter</string>
+    <string name="screen_title">Audit Izin</string>
+    <string name="screen_subtitle">Pemindai izin berisiko</string>
+    <string name="refresh">Muat ulang</string>
+
+    <string name="loading_scan">Memindai aplikasi terpasang…</string>
+    <string name="scan_failed">Gagal memindai aplikasi</string>
+    <string name="retry">Coba lagi</string>
+
+    <string name="show_system_apps">Tampilkan app sistem</string>
+    <string name="show_system_apps_desc">Sertakan app sistem inti yang tidak pernah diperbarui.</string>
+
+    <string name="summary_apps_scanned">%1$d aplikasi dipindai</string>
+    <string name="summary_risky">%1$d memiliki izin berisiko</string>
+    <string name="summary_sideload">%1$d dipasang lewat sideload</string>
+    <string name="privacy_note">Pemindaian dilakukan lokal di perangkat. Tidak ada data yang dikirim.</string>
+
+    <string name="filter_all">Semua (%1$d)</string>
+    <string name="filter_permission">%1$s (%2$d)</string>
+    <string name="permission_overlay">Overlay</string>
+    <string name="permission_accessibility">Aksesibilitas</string>
+    <string name="permission_device_admin">Admin perangkat</string>
+    <string name="permission_notification_listener">Listener notifikasi</string>
+    <string name="sort_caption">Diurutkan berdasarkan skor risiko</string>
+    <string name="risk_score">Skor %1$d</string>
+
+    <string name="installer_play_store">Play Store</string>
+    <string name="installer_sideload">Sideload</string>
+    <string name="installer_other">Lainnya</string>
+    <string name="installer_other_named">Lainnya · %1$s</string>
+    <string name="installed_on">Dipasang %1$s</string>
+    <string name="install_date_unknown">Tanggal pasang tidak diketahui</string>
+    <string name="system_app">Sistem</string>
+    <string name="no_risky_permissions">Tidak ada izin berisiko</string>
+
+    <string name="no_apps">Tidak ada aplikasi yang cocok</string>
+    <string name="no_apps_desc">Coba ubah filter atau tampilkan app sistem.</string>
+</resources>
