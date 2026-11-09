@@ -8,7 +8,9 @@
         dan app yang tidak muncul di recent apps. Izin ini normal (tanpa dialog runtime)
         dan aplikasi hanya dipasang lewat sideload, bukan untuk Play Store.
     -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
 
     <!--
         Foreground service pemantau aplikasi di layar.
