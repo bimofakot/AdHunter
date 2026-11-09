@@ -39,6 +39,7 @@ The latest APK is published on the **[Releases](https://github.com/bimofakot/AdH
 
 - **Updating:** install the new APK over the old one; no uninstall is needed. Every release uses the same key, so settings and the Monitor log are preserved.
 - **One-time step:** if you previously installed an APK from a GitHub Actions artifact (debug-signed), uninstall it before installing the first release.
+- **Verify (optional):** also download the `.apk.sha256` file, then run `sha256sum -c AdHunter-v….apk.sha256` in the same folder.
 
 ## Features
 
@@ -101,7 +102,7 @@ Every push to `main` — including merged pull requests — runs the [`release`]
 
 1. Builds `assembleRelease` with the release key from GitHub Secrets.
 2. `versionCode` follows the workflow run number; `versionName` is `0.1.0-build<N>`.
-3. Creates tag `v0.1.0-build<N>` and a GitHub Release containing the signed APK.
+3. Creates tag `v0.1.0-build<N>` and a GitHub Release containing the signed APK and its `.sha256` checksum.
 
 Required secrets: `ADHUNTER_KEYSTORE_BASE64`, `ADHUNTER_KEYSTORE_PASSWORD`, `ADHUNTER_KEY_ALIAS`, `ADHUNTER_KEY_PASSWORD`. Until the secrets are set, the release job is skipped and the [`build-apk`](.github/workflows/build-apk.yml) workflow still verifies the build on every branch.
 

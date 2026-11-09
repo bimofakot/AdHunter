@@ -39,6 +39,7 @@ APK terbaru ada di halaman **[Releases](https://github.com/bimofakot/AdHunter/re
 
 - **Update:** pasang APK baru langsung di atas versi lama, tanpa uninstall. Semua rilis memakai kunci yang sama, jadi pengaturan dan log Pemantau tetap aman.
 - **Sekali saja:** jika sebelumnya memakai APK dari artifact GitHub Actions (tanda tangan debug), uninstall dulu sebelum memasang rilis pertama.
+- **Verifikasi (opsional):** unduh juga `.apk.sha256`, lalu jalankan `sha256sum -c AdHunter-v….apk.sha256` di folder yang sama.
 
 ## Fitur
 
@@ -101,7 +102,7 @@ Setiap push ke `main` — termasuk hasil merge — menjalankan workflow [`releas
 
 1. Build `assembleRelease` dengan kunci rilis dari GitHub Secrets.
 2. `versionCode` naik mengikuti nomor run; `versionName` berbentuk `0.1.0-build<N>`.
-3. Terbit tag `v0.1.0-build<N>` dan GitHub Release berisi APK bertanda tangan.
+3. Terbit tag `v0.1.0-build<N>` dan GitHub Release berisi APK bertanda tangan beserta checksum `.sha256`.
 
 Secret yang dibutuhkan: `ADHUNTER_KEYSTORE_BASE64`, `ADHUNTER_KEYSTORE_PASSWORD`, `ADHUNTER_KEY_ALIAS`, `ADHUNTER_KEY_PASSWORD`. Tanpa secret, job rilis dilewati dan workflow [`build-apk`](.github/workflows/build-apk.yml) tetap memeriksa build di setiap branch.
 
