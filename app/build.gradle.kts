@@ -1,7 +1,31 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.plugin.compose")
 }
+
+// CI menimpa nomor build agar setiap rilis punya versionCode yang selalu naik.
+val buildNumber = providers.gradleProperty("buildNumber").orNull?.toIntOrNull()
+val versionNameOverride = providers.gradleProperty("versionName").orNull
+
+// Kunci rilis: env var (CI) diutamakan, lalu keystore.properties lokal yang diabaikan git.
+val keystoreProperties = Properties().apply {
+    val file = rootProject.file("keystore.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+
+fun signingValue(envName: String, propertyName: String): String? =
+    System.getenv(envName) ?: keystoreProperties.getProperty(propertyName)
+
+val releaseStoreFile = signingValue("ANDROID_KEYSTORE_PATH", "storeFile")?.let { rootProject.file(it) }
+val releaseStorePassword = signingValue("ANDROID_KEYSTORE_PASSWORD", "storePassword")
+val releaseKeyAlias = signingValue("ANDROID_KEY_ALIAS", "keyAlias")
+val releaseKeyPassword = signingValue("ANDROID_KEY_PASSWORD", "keyPassword")
+val hasReleaseSigning = releaseStoreFile?.exists() == true &&
+    !releaseStorePassword.isNullOrBlank() &&
+    !releaseKeyAlias.isNullOrBlank() &&
+    !releaseKeyPassword.isNullOrBlank()
 
 android {
     namespace = "com.massbim.adhunter"
@@ -11,8 +35,26 @@ android {
         applicationId = "com.massbim.adhunter"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = buildNumber ?: 1
+        versionName = versionNameOverride ?: "0.1.0"
+    }
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = releaseStoreFile
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        if (hasReleaseSigning) {
+            getByName("debug").signingConfig = signingConfigs.getByName("release")
+            getByName("release").signingConfig = signingConfigs.getByName("release")
+        }
     }
 
     compileOptions {

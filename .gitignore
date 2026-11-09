@@ -31,8 +31,4 @@ Thumbs.db
 desktop.ini
 *.log
 
-# Catatan lokal dan konfigurasi agent
-catatan/
-.qoder/
-
 # Catatan: gradlew, gradlew.bat, dan gradle/wrapper/ sengaja TIDAK diabaikan
