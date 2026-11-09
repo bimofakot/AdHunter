@@ -10,7 +10,6 @@
 
 package com.massbim.adhunter.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +18,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -51,8 +51,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -75,6 +73,7 @@ fun AuditScreen(viewModel: AuditViewModel = viewModel()) {
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        contentWindowInsets = WindowInsets(0),
         topBar = {
             TopAppBar(
                 title = {
@@ -327,7 +326,7 @@ private fun AppAuditCard(entry: AppAuditEntry) {
                 .fillMaxWidth()
                 .padding(16.dp),
         ) {
-            AppIcon(entry = entry)
+            AppIcon(icon = entry.icon, name = entry.appName)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -395,36 +394,6 @@ private fun AppAuditCard(entry: AppAuditEntry) {
 }
 
 @Composable
-private fun AppIcon(entry: AppAuditEntry) {
-    val image = remember(entry.icon) { entry.icon?.asImageBitmap() }
-    if (image != null) {
-        Image(
-            bitmap = image,
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .size(48.dp)
-                .clip(RoundedCornerShape(14.dp)),
-        )
-    } else {
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .clip(RoundedCornerShape(14.dp))
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = entry.appName.take(1).uppercase(),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-        }
-    }
-}
-
-@Composable
 private fun RiskScoreBadge(score: Int) {
     val containerColor = when {
         score >= 4 -> MaterialTheme.colorScheme.errorContainer
@@ -449,41 +418,6 @@ private fun RiskScoreBadge(score: Int) {
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         )
-    }
-}
-
-@Composable
-private fun PermissionBadge(permission: RiskyPermission) {
-    val (containerColor, contentColor) = permissionColors(permission)
-    Surface(
-        shape = RoundedCornerShape(50),
-        color = containerColor,
-        contentColor = contentColor,
-    ) {
-        Text(
-            text = stringResource(permission.labelRes()),
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-        )
-    }
-}
-
-@Composable
-private fun permissionColors(permission: RiskyPermission): Pair<Color, Color> {
-    val colors = MaterialTheme.colorScheme
-    return when (permission) {
-        RiskyPermission.OVERLAY ->
-            colors.errorContainer to colors.onErrorContainer
-
-        RiskyPermission.ACCESSIBILITY ->
-            colors.tertiaryContainer to colors.onTertiaryContainer
-
-        RiskyPermission.DEVICE_ADMIN ->
-            colors.secondaryContainer to colors.onSecondaryContainer
-
-        RiskyPermission.NOTIFICATION_LISTENER ->
-            colors.primaryContainer to colors.onPrimaryContainer
     }
 }
 
@@ -639,11 +573,4 @@ private fun installDateText(firstInstallTime: Long): String {
     val formatted = DateFormat.getDateInstance(DateFormat.MEDIUM)
         .format(Date(firstInstallTime))
     return stringResource(R.string.installed_on, formatted)
-}
-
-private fun RiskyPermission.labelRes(): Int = when (this) {
-    RiskyPermission.OVERLAY -> R.string.permission_overlay
-    RiskyPermission.ACCESSIBILITY -> R.string.permission_accessibility
-    RiskyPermission.DEVICE_ADMIN -> R.string.permission_device_admin
-    RiskyPermission.NOTIFICATION_LISTENER -> R.string.permission_notification_listener
 }

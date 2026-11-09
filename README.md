@@ -2,7 +2,9 @@
 
 Auditor izin Android untuk menemukan aplikasi pelaku spam iklan, termasuk aplikasi yang tidak muncul di recents. Dipakai pribadi lewat sideload, bukan aplikasi Play Store.
 
-## Cara kerja
+## Fitur
+
+### Audit Izin
 
 - Memindai semua aplikasi terpasang menggunakan `QUERY_ALL_PACKAGES` agar app tanpa launcher dan app tersembunyi ikut terlihat.
 - Mendeteksi empat izin berisiko: Overlay, Aksesibilitas, Admin perangkat, dan Listener notifikasi.
@@ -10,6 +12,32 @@ Auditor izin Android untuk menemukan aplikasi pelaku spam iklan, termasuk aplika
 - Skor risiko = jumlah izin berisiko + 1 jika sideload. Daftar diurutkan dari skor tertinggi.
 - App sistem inti yang bertanda `FLAG_SYSTEM` dan tidak pernah diperbarui disembunyikan. Toggle "Tampilkan app sistem" membuka semuanya.
 - Pemindaian berjalan lokal di perangkat (`Dispatchers.Default`), tanpa izin INTERNET dan tanpa pengiriman data.
+
+### Pemantau aplikasi di layar
+
+Pengganti `adb shell dumpsys window | findstr mCurrentFocus` yang berjalan langsung di HP.
+
+- Foreground service bertipe `specialUse` dengan notifikasi permanen **AdHunter memantau**, tombol Hentikan di notifikasi, dan `START_STICKY` agar service dibuat ulang setelah proses aplikasi dimatikan.
+- Mem-poll `UsageStatsManager.queryEvents` (`ACTIVITY_RESUMED` / `MOVE_TO_FOREGROUND`) setiap detik hanya saat layar menyala (`PowerManager.isInteractive`), lalu mencatat waktu, nama paket, nama aplikasi, dan nama activity bila tersedia.
+- Log disimpan lokal di SQLite lewat `SQLiteOpenHelper`, maksimal **2000 entri terbaru**. Entri lama dibuang otomatis setiap kali entri baru masuk.
+- Entri disorot merah bila paketnya punya izin berisiko menurut scanner Audit Izin, atau tidak punya launcher dan bukan app sistem. Alasan sorotan ditampilkan di kartu.
+- Filter "Hanya disorot" dan tombol hapus log (dengan konfirmasi).
+- Status layanan, tombol Mulai/Hentikan, serta kartu peringatan untuk Usage Access, izin notifikasi, dan optimasi baterai.
+
+#### Batasan jujur
+
+`UsageStats` hanya menangkap aplikasi/activity yang benar-benar tampil di layar sebagai activity. Iklan yang muncul sebagai overlay (`SYSTEM_ALERT_WINDOW`) **tidak tercatat** di layar Pemantau. Kasus seperti itu tetap ditangkap lewat badge **Overlay** di layar Audit Izin, karena overlay tidak selalu membuat activity baru. Gunakan kedua layar secara berdampingan untuk hasil terbaik.
+
+## Izin yang perlu diaktifkan manual
+
+1. **Usage Access** (wajib untuk Pemantau)
+   Buka **Pengaturan → Aplikasi → Akses khusus → Akses penggunaan** (di sebagian perangkat: **Privasi → Akses khusus → Akses penggunaan**), pilih **AdHunter**, lalu aktifkan **Izinkan pelacakan penggunaan**. Alternatif cepat: tombol **Buka Usage Access** di layar Pemantau.
+2. **Notifikasi** (Android 13 ke atas)
+   Saat pemantauan pertama dimulai, Android menampilkan dialog izin notifikasi. Jika ditolak, aktifkan lewat **Pengaturan → Aplikasi → AdHunter → Notifikasi**. Pemantauan tetap berjalan walau notifikasi disembunyikan, tetapi status permanen tidak terlihat.
+3. **Optimasi baterai** (disarankan)
+   Tekan **Kecualikan** di kartu Optimasi baterai pada layar Pemantau. Jika dialog tidak tersedia, buka **Pengaturan → Baterai → Optimasi baterai → Semua aplikasi → AdHunter → Jangan optimalkan**.
+
+Service sengaja dimulai dari tombol di aplikasi (bukan dari background) agar mematuhi batasan foreground service Android 14 ke atas. Pemantauan tidak berjalan otomatis setelah HP restart; mulai lagi dari layar Pemantau.
 
 ## Struktur folder
 
@@ -21,11 +49,22 @@ AdHunter/
 │       ├── AndroidManifest.xml
 │       ├── java/com/massbim/adhunter/
 │       │   ├── MainActivity.kt
-│       │   ├── data/AppAuditScanner.kt
-│       │   ├── model/AppAudit.kt
+│       │   ├── data/
+│       │   │   ├── AppAuditScanner.kt
+│       │   │   ├── ForegroundLogStore.kt
+│       │   │   ├── ForegroundMonitorService.kt
+│       │   │   └── UsageAccess.kt
+│       │   ├── model/
+│       │   │   ├── AppAudit.kt
+│       │   │   └── ForegroundLog.kt
 │       │   └── ui/
+│       │       ├── AppIcon.kt
+│       │       ├── AppRoot.kt
 │       │       ├── AuditScreen.kt
 │       │       ├── AuditViewModel.kt
+│       │       ├── MonitorScreen.kt
+│       │       ├── MonitorViewModel.kt
+│       │       ├── PermissionBadge.kt
 │       │       └── theme/Theme.kt
 │       └── res/
 │           ├── drawable/

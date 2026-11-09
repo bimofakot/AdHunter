@@ -37,4 +37,57 @@
 
     <string name="no_apps">Tidak ada aplikasi yang cocok</string>
     <string name="no_apps_desc">Coba ubah filter atau tampilkan app sistem.</string>
+
+    <string name="tab_audit">Audit Izin</string>
+    <string name="tab_monitor">Pemantau</string>
+
+    <string name="monitor_title">Pemantau</string>
+    <string name="monitor_subtitle">Aplikasi yang tampil di layar</string>
+    <string name="monitor_refresh">Muat ulang</string>
+    <string name="monitor_start">Mulai pemantauan</string>
+    <string name="monitor_stop">Hentikan</string>
+    <string name="monitor_running">Pemantauan aktif</string>
+    <string name="monitor_stopped">Pemantauan berhenti</string>
+    <string name="monitor_running_desc">AdHunter mencatat setiap pergantian aplikasi di layar selama layar menyala. Notifikasi permanen tampil selama pemantauan.</string>
+    <string name="monitor_stopped_desc">Mulai pemantauan untuk menggantikan perintah dumpsys window tanpa kabel.</string>
+
+    <string name="monitor_usage_missing_title">Izin Usage Access belum aktif</string>
+    <string name="monitor_usage_missing_desc">Android membatasi riwayat aplikasi yang tampil. Aktifkan AdHunter di Usage Access agar pemantauan bisa mencatat pergantian aplikasi.</string>
+    <string name="monitor_open_usage_settings">Buka Usage Access</string>
+
+    <string name="monitor_notifications_missing_title">Izin notifikasi belum aktif</string>
+    <string name="monitor_notifications_missing_desc">Di Android 13 ke atas, notifikasi permanen “AdHunter memantau” butuh izin notifikasi. Pemantauan tetap berjalan walau notifikasi disembunyikan.</string>
+    <string name="monitor_open_notification_settings">Buka pengaturan notifikasi</string>
+
+    <string name="monitor_battery_title">Optimasi baterai</string>
+    <string name="monitor_battery_desc">Kecualikan AdHunter dari optimasi baterai agar pemantauan tidak dihentikan sistem saat layar mati.</string>
+    <string name="monitor_battery_exempt">AdHunter sudah dikecualikan dari optimasi baterai.</string>
+    <string name="monitor_battery_action">Kecualikan</string>
+
+    <string name="monitor_filter_highlighted">Hanya disorot (%1$d)</string>
+    <string name="monitor_clear_log">Hapus log</string>
+    <string name="monitor_clear_confirm_title">Hapus semua log?</string>
+    <string name="monitor_clear_confirm_desc">%1$d entri akan dihapus. Pemantauan tetap berjalan.</string>
+    <string name="monitor_clear_confirm">Hapus</string>
+    <string name="monitor_cancel">Batal</string>
+    <string name="monitor_log_count">%1$d entri terbaru · maksimal 2000</string>
+    <string name="monitor_current_hint">Log disimpan lokal di perangkat, maksimal 2000 entri terbaru. Entri lama dibuang otomatis.</string>
+
+    <string name="monitor_loading">Memuat log dan data risiko…</string>
+    <string name="monitor_empty">Belum ada log</string>
+    <string name="monitor_empty_desc">Setelah pemantauan berjalan, setiap aplikasi yang tampil di layar akan tercatat di sini.</string>
+    <string name="monitor_empty_filtered">Tidak ada entri yang disorot</string>
+    <string name="monitor_empty_filtered_desc">Matikan filter untuk melihat semua log.</string>
+    <string name="monitor_error">Sebagian data risiko gagal dimuat: %1$s</string>
+
+    <string name="monitor_highlight_reason_permissions">Izin berisiko: %1$s</string>
+    <string name="monitor_highlight_reason_hidden">Tidak punya launcher dan bukan app sistem</string>
+    <string name="monitor_badge_no_launcher">Tanpa launcher</string>
+    <string name="monitor_activity">Activity: %1$s</string>
+
+    <string name="monitor_channel_name">Pemantauan AdHunter</string>
+    <string name="monitor_channel_desc">Notifikasi permanen selama pemantauan aplikasi di layar.</string>
+    <string name="monitor_notification_title">AdHunter memantau</string>
+    <string name="monitor_notification_text">Mencatat aplikasi yang tampil di layar</string>
+    <string name="monitor_notification_stop">Hentikan</string>
 </resources>
