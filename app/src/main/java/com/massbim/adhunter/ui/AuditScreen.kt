@@ -38,6 +38,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -109,11 +110,15 @@ fun AuditScreen(viewModel: AuditViewModel = viewModel()) {
         },
     ) { innerPadding ->
         val selectedPermission = state.selectedPermission
-        val visibleEntries = remember(state.entries, selectedPermission) {
-            if (selectedPermission == null) {
-                state.entries
-            } else {
-                state.entries.filter { selectedPermission in it.riskyPermissions }
+        val query = state.query.trim()
+        val visibleEntries = remember(state.entries, selectedPermission, query) {
+            state.entries.filter { entry ->
+                val matchesPermission =
+                    selectedPermission == null || selectedPermission in entry.riskyPermissions
+                val matchesQuery = query.isEmpty() ||
+                    entry.appName.contains(query, ignoreCase = true) ||
+                    entry.packageName.contains(query, ignoreCase = true)
+                matchesPermission && matchesQuery
             }
         }
 
@@ -141,6 +146,12 @@ fun AuditScreen(viewModel: AuditViewModel = viewModel()) {
                 else -> {
                     item { SummaryCard(entries = state.entries) }
                     item {
+                        SearchField(
+                            query = state.query,
+                            onQueryChange = viewModel::setQuery,
+                        )
+                    }
+                    item {
                         SystemAppsToggle(
                             checked = state.showSystemApps,
                             onCheckedChange = viewModel::setShowSystemApps,
@@ -163,7 +174,7 @@ fun AuditScreen(viewModel: AuditViewModel = viewModel()) {
                     }
 
                     if (visibleEntries.isEmpty()) {
-                        item { EmptyState() }
+                        item { EmptyState(query = query) }
                     } else {
                         items(
                             items = visibleEntries,
@@ -240,6 +251,37 @@ private fun SummaryCard(entries: List<AppAuditEntry>) {
             }
         }
     }
+}
+
+@Composable
+private fun SearchField(
+    query: String,
+    onQueryChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
+        shape = RoundedCornerShape(16.dp),
+        placeholder = { Text(stringResource(R.string.search_hint)) },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_search),
+                contentDescription = null,
+            )
+        },
+        trailingIcon = {
+            if (query.isNotEmpty()) {
+                IconButton(onClick = { onQueryChange("") }) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_close),
+                        contentDescription = stringResource(R.string.search_clear),
+                    )
+                }
+            }
+        },
+    )
 }
 
 @Composable
@@ -388,6 +430,13 @@ private fun AppAuditCard(entry: AppAuditEntry) {
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                if (entry.canForceStop) {
+                    Spacer(Modifier.height(4.dp))
+                    ForceStopAction(
+                        packageName = entry.packageName,
+                        appName = entry.appName,
+                    )
+                }
             }
         }
     }
@@ -543,7 +592,8 @@ private fun ErrorState(
 }
 
 @Composable
-private fun EmptyState() {
+private fun EmptyState(query: String) {
+    val searching = query.isNotEmpty()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -551,13 +601,19 @@ private fun EmptyState() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = stringResource(R.string.no_apps),
+            text = stringResource(
+                if (searching) R.string.search_empty else R.string.no_apps,
+            ),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text = stringResource(R.string.no_apps_desc),
+            text = if (searching) {
+                stringResource(R.string.search_empty_desc, query)
+            } else {
+                stringResource(R.string.no_apps_desc)
+            },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,

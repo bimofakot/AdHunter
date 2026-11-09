@@ -2,92 +2,104 @@
 <resources>
     <string name="app_name">AdHunter</string>
     <string name="screen_title">Audit Izin</string>
-    <string name="screen_subtitle">Pemindai izin berisiko</string>
+    <string name="screen_subtitle">Cek izin berisiko di HP kamu</string>
     <string name="refresh">Muat ulang</string>
 
-    <string name="loading_scan">Memindai aplikasi terpasang…</string>
-    <string name="scan_failed">Gagal memindai aplikasi</string>
+    <string name="loading_scan">Sedang memeriksa aplikasi…</string>
+    <string name="scan_failed">Pemeriksaan gagal</string>
     <string name="retry">Coba lagi</string>
 
-    <string name="show_system_apps">Tampilkan app sistem</string>
-    <string name="show_system_apps_desc">Sertakan app sistem inti yang tidak pernah diperbarui.</string>
+    <string name="search_hint">Cari aplikasi atau nama paket</string>
+    <string name="search_clear">Hapus pencarian</string>
+    <string name="search_empty">Tidak ditemukan</string>
+    <string name="search_empty_desc">Tidak ada aplikasi yang cocok dengan “%1$s”.</string>
 
-    <string name="summary_apps_scanned">%1$d aplikasi dipindai</string>
-    <string name="summary_risky">%1$d memiliki izin berisiko</string>
-    <string name="summary_sideload">%1$d dipasang lewat sideload</string>
-    <string name="privacy_note">Pemindaian dilakukan lokal di perangkat. Tidak ada data yang dikirim.</string>
+    <string name="show_system_apps">Sertakan aplikasi sistem</string>
+    <string name="show_system_apps_desc">Aplikasi bawaan HP yang jarang diperbarui ikut ditampilkan.</string>
+
+    <string name="summary_apps_scanned">%1$d aplikasi diperiksa</string>
+    <string name="summary_risky">%1$d pakai izin berisiko</string>
+    <string name="summary_sideload">%1$d dipasang bukan dari Play Store</string>
+    <string name="privacy_note">Semua pemeriksaan dilakukan di HP ini. Tidak ada data yang dikirim ke mana pun.</string>
 
     <string name="filter_all">Semua (%1$d)</string>
     <string name="filter_permission">%1$s (%2$d)</string>
     <string name="permission_overlay">Overlay</string>
     <string name="permission_accessibility">Aksesibilitas</string>
     <string name="permission_device_admin">Admin perangkat</string>
-    <string name="permission_notification_listener">Listener notifikasi</string>
-    <string name="sort_caption">Diurutkan berdasarkan skor risiko</string>
+    <string name="permission_notification_listener">Akses notifikasi</string>
+    <string name="sort_caption">Yang paling berisiko muncul di atas</string>
     <string name="risk_score">Skor %1$d</string>
 
     <string name="installer_play_store">Play Store</string>
-    <string name="installer_sideload">Sideload</string>
+    <string name="installer_sideload">Bukan Play Store</string>
     <string name="installer_other">Lainnya</string>
     <string name="installer_other_named">Lainnya · %1$s</string>
-    <string name="installed_on">Dipasang %1$s</string>
+    <string name="installed_on">Terpasang %1$s</string>
     <string name="install_date_unknown">Tanggal pasang tidak diketahui</string>
     <string name="system_app">Sistem</string>
     <string name="no_risky_permissions">Tidak ada izin berisiko</string>
 
     <string name="no_apps">Tidak ada aplikasi yang cocok</string>
-    <string name="no_apps_desc">Coba ubah filter atau tampilkan app sistem.</string>
+    <string name="no_apps_desc">Coba ganti filter atau sertakan aplikasi sistem.</string>
 
     <string name="tab_audit">Audit Izin</string>
     <string name="tab_monitor">Pemantau</string>
 
     <string name="monitor_title">Pemantau</string>
-    <string name="monitor_subtitle">Aplikasi yang tampil di layar</string>
+    <string name="monitor_subtitle">Lihat aplikasi yang muncul di layar</string>
     <string name="monitor_refresh">Muat ulang</string>
-    <string name="monitor_start">Mulai pemantauan</string>
-    <string name="monitor_stop">Hentikan</string>
-    <string name="monitor_running">Pemantauan aktif</string>
+    <string name="monitor_start">Mulai memantau</string>
+    <string name="monitor_stop">Berhenti memantau</string>
+    <string name="monitor_running">Pemantauan berjalan</string>
     <string name="monitor_stopped">Pemantauan berhenti</string>
-    <string name="monitor_running_desc">AdHunter mencatat setiap pergantian aplikasi di layar selama layar menyala. Notifikasi permanen tampil selama pemantauan.</string>
-    <string name="monitor_stopped_desc">Mulai pemantauan untuk menggantikan perintah dumpsys window tanpa kabel.</string>
+    <string name="monitor_running_desc">Setiap kali kamu berpindah aplikasi, AdHunter mencatatnya selama layar menyala. Notifikasi tetap tampil sebagai tanda pemantauan aktif.</string>
+    <string name="monitor_stopped_desc">Nyalakan pemantauan supaya AdHunter bisa mencatat aplikasi yang muncul di layar.</string>
 
-    <string name="monitor_usage_missing_title">Izin Usage Access belum aktif</string>
-    <string name="monitor_usage_missing_desc">Android membatasi riwayat aplikasi yang tampil. Aktifkan AdHunter di Usage Access agar pemantauan bisa mencatat pergantian aplikasi.</string>
-    <string name="monitor_open_usage_settings">Buka Usage Access</string>
+    <string name="monitor_usage_missing_title">Aktifkan Akses penggunaan</string>
+    <string name="monitor_usage_missing_desc">Android membatasi riwayat aplikasi. Tanpa izin ini, AdHunter tidak bisa mencatat aplikasi yang muncul di layar.</string>
+    <string name="monitor_open_usage_settings">Buka pengaturan</string>
 
-    <string name="monitor_notifications_missing_title">Izin notifikasi belum aktif</string>
-    <string name="monitor_notifications_missing_desc">Di Android 13 ke atas, notifikasi permanen “AdHunter memantau” butuh izin notifikasi. Pemantauan tetap berjalan walau notifikasi disembunyikan.</string>
+    <string name="monitor_notifications_missing_title">Izinkan notifikasi</string>
+    <string name="monitor_notifications_missing_desc">Di Android 13 ke atas, notifikasi pemantauan butuh izin. Pemantauan tetap jalan walau notifikasi disembunyikan.</string>
     <string name="monitor_open_notification_settings">Buka pengaturan notifikasi</string>
 
-    <string name="monitor_battery_title">Optimasi baterai</string>
-    <string name="monitor_battery_desc">Kecualikan AdHunter dari optimasi baterai agar pemantauan tidak dihentikan sistem saat layar mati.</string>
-    <string name="monitor_battery_exempt">AdHunter sudah dikecualikan dari optimasi baterai.</string>
+    <string name="monitor_battery_title">Hemat baterai</string>
+    <string name="monitor_battery_desc">Kecualikan AdHunter dari penghemat baterai supaya pemantauan tidak dimatikan sendiri oleh sistem.</string>
+    <string name="monitor_battery_exempt">AdHunter sudah dikecualikan dari penghemat baterai.</string>
     <string name="monitor_battery_action">Kecualikan</string>
 
-    <string name="monitor_filter_highlighted">Hanya disorot (%1$d)</string>
-    <string name="monitor_clear_log">Hapus log</string>
-    <string name="monitor_clear_confirm_title">Hapus semua log?</string>
-    <string name="monitor_clear_confirm_desc">%1$d entri akan dihapus. Pemantauan tetap berjalan.</string>
-    <string name="monitor_clear_confirm">Hapus</string>
+    <string name="monitor_filter_highlighted">Perlu dicek (%1$d)</string>
+    <string name="monitor_clear_log">Bersihkan riwayat</string>
+    <string name="monitor_clear_confirm_title">Bersihkan semua riwayat?</string>
+    <string name="monitor_clear_confirm_desc">%1$d aktivitas akan dihapus. Pemantauan tetap berjalan.</string>
+    <string name="monitor_clear_confirm">Bersihkan</string>
     <string name="monitor_cancel">Batal</string>
-    <string name="monitor_log_count">%1$d entri terbaru · maksimal 2000</string>
-    <string name="monitor_current_hint">Log disimpan lokal di perangkat, maksimal 2000 entri terbaru. Entri lama dibuang otomatis.</string>
+    <string name="monitor_log_count">%1$d aktivitas terbaru</string>
+    <string name="monitor_log_count_filtered">%1$d dari %2$d aktivitas</string>
+    <string name="monitor_current_hint">Riwayat disimpan hanya di HP ini, maksimal 2.000 aktivitas terbaru. Aktivitas paling lama terhapus otomatis.</string>
 
-    <string name="monitor_loading">Memuat log dan data risiko…</string>
-    <string name="monitor_empty">Belum ada log</string>
-    <string name="monitor_empty_desc">Setelah pemantauan berjalan, setiap aplikasi yang tampil di layar akan tercatat di sini.</string>
-    <string name="monitor_empty_filtered">Tidak ada entri yang disorot</string>
-    <string name="monitor_empty_filtered_desc">Matikan filter untuk melihat semua log.</string>
-    <string name="monitor_error">Sebagian data risiko gagal dimuat: %1$s</string>
+    <string name="monitor_loading">Menyiapkan daftar aplikasi…</string>
+    <string name="monitor_empty">Belum ada aktivitas</string>
+    <string name="monitor_empty_desc">Setelah pemantauan menyala, setiap aplikasi yang muncul di layar akan tercatat di sini.</string>
+    <string name="monitor_empty_filtered">Tidak ada yang perlu dicek</string>
+    <string name="monitor_empty_filtered_desc">Matikan filter untuk melihat semua aktivitas.</string>
+    <string name="monitor_error">Sebagian data izin gagal dimuat: %1$s</string>
 
-    <string name="monitor_highlight_reason_permissions">Izin berisiko: %1$s</string>
-    <string name="monitor_highlight_reason_hidden">Tidak punya launcher dan bukan app sistem</string>
-    <string name="monitor_badge_no_launcher">Tanpa launcher</string>
-    <string name="monitor_activity">Activity: %1$s</string>
+    <string name="monitor_highlight_reason_permissions">Punya izin: %1$s</string>
+    <string name="monitor_highlight_reason_hidden">Tidak muncul di daftar aplikasi dan bukan aplikasi sistem</string>
+    <string name="monitor_badge_no_launcher">Tanpa ikon di layar</string>
+    <string name="monitor_activity">Detail: %1$s</string>
+
+    <string name="force_stop_action">Hentikan paksa</string>
+    <string name="force_stop_title">Hentikan paksa %1$s?</string>
+    <string name="force_stop_desc">Android tidak mengizinkan AdHunter menghentikan aplikasi lain secara langsung. Di halaman berikutnya, ketuk “Hentikan paksa”, lalu kembali ke AdHunter.</string>
+    <string name="force_stop_confirm">Buka Info App</string>
+    <string name="force_stop_cancel">Batal</string>
 
     <string name="monitor_channel_name">Pemantauan AdHunter</string>
-    <string name="monitor_channel_desc">Notifikasi permanen selama pemantauan aplikasi di layar.</string>
-    <string name="monitor_notification_title">AdHunter memantau</string>
-    <string name="monitor_notification_text">Mencatat aplikasi yang tampil di layar</string>
-    <string name="monitor_notification_stop">Hentikan</string>
+    <string name="monitor_channel_desc">Notifikasi tetap selama pemantauan aktif.</string>
+    <string name="monitor_notification_title">AdHunter sedang memantau</string>
+    <string name="monitor_notification_text">Mencatat aplikasi yang muncul di layar</string>
+    <string name="monitor_notification_stop">Berhenti memantau</string>
 </resources>

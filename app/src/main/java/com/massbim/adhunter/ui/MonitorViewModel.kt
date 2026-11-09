@@ -46,6 +46,10 @@ class MonitorViewModel(application: Application) : AndroidViewModel(application)
     val uiState: StateFlow<MonitorUiState> = _uiState.asStateFlow()
 
     private var riskIndex: Map<String, AppAuditEntry> = emptyMap()
+
+    // Log ditahan sampai snapshot risiko pertama selesai, agar kartu tidak
+    // sempat tampil tanpa sorotan dan tanpa ikon aplikasi.
+    private var riskDataReady = false
     private var loadJob: Job? = null
     private val updateMutex = Mutex()
 
@@ -65,10 +69,16 @@ class MonitorViewModel(application: Application) : AndroidViewModel(application)
             try {
                 riskIndex = scanner.scan(includeSystemApps = true)
                     .associateBy { it.packageName }
+                riskDataReady = true
             } catch (cancellation: CancellationException) {
                 throw cancellation
             } catch (error: Exception) {
                 _uiState.update { it.copy(errorMessage = error.message) }
+            }
+
+            if (!riskDataReady) {
+                _uiState.update { it.copy(isLoading = false) }
+                return@launch
             }
 
             val records = runCatching { logStore.loadRecent() }.getOrDefault(emptyList())
@@ -81,6 +91,7 @@ class MonitorViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun refreshLogs() {
+        if (!riskDataReady) return
         viewModelScope.launch {
             val records = runCatching { logStore.loadRecent() }.getOrNull() ?: return@launch
             updateMutex.withLock {
@@ -125,6 +136,7 @@ class MonitorViewModel(application: Application) : AndroidViewModel(application)
                 hiddenFromLauncher = appEntry != null &&
                     !appEntry.hasLauncherIntent &&
                     !appEntry.isSystemApp,
+                canForceStop = appEntry?.canForceStop == true,
             )
         }
 }

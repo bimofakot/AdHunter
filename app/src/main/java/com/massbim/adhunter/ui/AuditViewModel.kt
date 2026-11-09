@@ -24,6 +24,7 @@ data class AuditUiState(
     val entries: List<AppAuditEntry> = emptyList(),
     val showSystemApps: Boolean = false,
     val selectedPermission: RiskyPermission? = null,
+    val query: String = "",
     val errorMessage: String? = null,
 )
 
@@ -70,5 +71,9 @@ class AuditViewModel(application: Application) : AndroidViewModel(application) {
 
     fun selectPermission(permission: RiskyPermission?) {
         _uiState.update { it.copy(selectedPermission = permission) }
+    }
+
+    fun setQuery(query: String) {
+        _uiState.update { it.copy(query = query) }
     }
 }

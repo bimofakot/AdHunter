@@ -42,6 +42,7 @@ class AppAuditScanner(context: Context) {
             val adminPackages = activeDeviceAdminPackages()
             val listenerPackages = enabledNotificationListenerPackages()
             val launcherPackages = launcherVisiblePackages()
+            val homePackages = homePackages()
             val applications = installedApplications()
             val entries = ArrayList<AppAuditEntry>(applications.size)
 
@@ -89,6 +90,7 @@ class AppAuditScanner(context: Context) {
                     lastUpdateTime = lastUpdateTime,
                     isSystemApp = isSystemApp,
                     hasLauncherIntent = application.packageName in launcherPackages,
+                    canForceStop = isForceStoppable(isSystemApp, application.packageName, homePackages),
                 )
             }
 
@@ -111,6 +113,26 @@ class AppAuditScanner(context: Context) {
             .mapNotNull { it.activityInfo?.packageName }
             .toSet()
     }.getOrDefault(emptySet())
+
+    // Launcher yang sedang jadi home screen tidak boleh ditawari "hentikan paksa".
+    @Suppress("DEPRECATION")
+    private fun homePackages(): Set<String> = runCatching {
+        val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
+        packageManager.queryIntentActivities(intent, 0)
+            .mapNotNull { it.activityInfo?.packageName }
+            .toSet()
+    }.getOrDefault(emptySet())
+
+    // Hanya app pengguna biasa yang aman dihentikan: bukan app sistem, bukan launcher,
+    // bukan AdHunter sendiri, dan bukan paket inti yang membuat HP tidak responsif.
+    private fun isForceStoppable(
+        isSystemApp: Boolean,
+        packageName: String,
+        homePackages: Set<String>,
+    ): Boolean = !isSystemApp &&
+        packageName != appContext.packageName &&
+        packageName !in homePackages &&
+        packageName !in PROTECTED_PACKAGES
 
     private fun loadAppName(application: ApplicationInfo): String {
         val label = runCatching { application.loadLabel(packageManager).toString() }
@@ -183,6 +205,15 @@ class AppAuditScanner(context: Context) {
     private companion object {
         const val PLAY_STORE_PACKAGE = "com.android.vending"
         const val ICON_SIZE_PX = 96
+
+        val PROTECTED_PACKAGES = setOf(
+            "com.android.systemui",
+            "com.android.settings",
+            "com.android.permissioncontroller",
+            "com.google.android.permissioncontroller",
+            "com.android.packageinstaller",
+            "com.google.android.packageinstaller",
+        )
 
         val SIDELOAD_INSTALLERS = setOf(
             "com.android.packageinstaller",

@@ -19,6 +19,7 @@ data class MonitorLogItem(
     val icon: Bitmap?,
     val riskyPermissions: Set<RiskyPermission>,
     val hiddenFromLauncher: Boolean,
+    val canForceStop: Boolean,
 ) {
     val isHighlighted: Boolean
         get() = riskyPermissions.isNotEmpty() || hiddenFromLauncher
