@@ -30,6 +30,8 @@ data class AppAuditEntry(
     val lastUpdateTime: Long,
     val isSystemApp: Boolean,
     val hasLauncherIntent: Boolean,
+    // App sistem, launcher, dan AdHunter sendiri tidak boleh dihentikan paksa.
+    val canForceStop: Boolean,
 ) {
     val riskScore: Int
         get() = riskyPermissions.size + if (installer == InstallerSource.SIDELOAD) 1 else 0

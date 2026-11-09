@@ -264,13 +264,24 @@ fun MonitorScreen(viewModel: MonitorViewModel = viewModel()) {
                 }
             }
 
-            item {
-                Text(
-                    text = stringResource(R.string.monitor_log_count, state.logs.size),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 4.dp),
-                )
+            // Jumlah disembunyikan saat muat pertama agar tidak sempat terbaca "0 aktivitas".
+            if (!state.isLoading || state.logs.isNotEmpty()) {
+                item {
+                    Text(
+                        text = if (state.onlyHighlighted) {
+                            stringResource(
+                                R.string.monitor_log_count_filtered,
+                                visibleLogs.size,
+                                state.logs.size,
+                            )
+                        } else {
+                            stringResource(R.string.monitor_log_count, state.logs.size)
+                        },
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 4.dp),
+                    )
+                }
             }
 
             if (state.errorMessage != null) {
@@ -577,6 +588,18 @@ private fun MonitorLogCard(item: MonitorLogItem) {
                         text = highlightReason(item),
                         style = MaterialTheme.typography.labelMedium,
                         color = contentColor,
+                    )
+                }
+
+                if (item.canForceStop) {
+                    ForceStopAction(
+                        packageName = item.entry.packageName,
+                        appName = item.entry.appName,
+                        contentColor = if (highlighted) {
+                            contentColor
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        },
                     )
                 }
             }
